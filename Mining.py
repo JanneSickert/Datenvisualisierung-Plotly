@@ -54,3 +54,11 @@ class SortData:
         grouped = SortData.df.groupby(["Produktlinie"]).mean()
         res = pd.DataFrame(grouped["Bewertung"])
         return res
+    
+    @staticmethod
+    def get_gesamtumsatz() -> str:
+        return "100"
+
+    @staticmethod
+    def get_umsatz_im_mohnat(mohnat : int) -> str:
+        return "100"

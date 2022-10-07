@@ -1,7 +1,6 @@
 import dash
-import  dash_html_components as html
+from dash import html, dcc
 import plotly.graph_objects as go
-import dash_core_components as dcc
 from dash.dependencies import Input, Output
 import pandas as pd
 import dash_bootstrap_components as dbc
@@ -13,7 +12,7 @@ mg.SortData.init_dataframe()
 print(mg.SortData.df)
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 PLOTLY_LOGO = "https://images.plot.ly/logo/new-branding/plotly-logomark.png"
-TITLE = 'Supermarket Sales'
+TITLE = 'Supermarkt Verkäufe'
 app.title = TITLE
 server = app.server
 navbar = dbc.Navbar( id = 'navbar', children = [
@@ -48,10 +47,9 @@ body_app = dbc.Container([
                     ])
                 ]
             )
-        ],
-        style={'height':'150px'})],width = 4),
-        dbc.Col([dbc.Card(id = 'card_num1',style={'height':'150px'})]),
-        dbc.Col([dbc.Card(id = 'card_num2',style={'height':'150px'})])
+        ], style={'height':'150px'})],width = 4),
+        dbc.Col([dcc.Markdown("# Umsatz  aller   Mohnate: **" + mg.SortData.get_gesamtumsatz() + "€**")]),
+        dbc.Col([dcc.Markdown("# Umsatz aktueller Mohnat: **" + mg.SortData.get_umsatz_im_mohnat(0) + "€**")])
     ]),
     html.Br(),
     html.Br(),
@@ -72,5 +70,27 @@ body_app = dbc.Container([
     )
 app.layout = html.Div(id = 'parent', children = [navbar, body_app])
 
+
+@app.callback([Output('card_num1', 'children'),
+               Output('card_num2', 'children'),
+               ],)
+def update_cards():
+    card_content = [
+        dbc.CardBody([
+                html.H6('Gesamtumsatz', style = {'fontWeight':'lighter', 'textAlign':'center'}),
+                html.H3('{0}{1}'.format(mg.SortData.get_gesamtumsatz(), "€"), style = {'color':'#090059','textAlign':'center'})
+                ]
+            )
+        ]
+    card_content1 = [
+        dbc.CardBody([
+                html.H6('Ferienumsatz', style = {'fontWeight':'lighter', 'textAlign':'center'}),
+                html.H3('{0}{1}'.format(mg.SortData.get_umsatz_im_mohnat(0), "€"), style = {'color':'#090059','textAlign':'center'})
+                ]
+            )
+        ]
+    return card_content, card_content1
+
 if __name__ == "__main__":
     app.run_server()
+    # https://www.youtube.com/watch?v=cCRF7iM-iF4&list=PLh3I780jNsiTnCs2LNt4ckbV-c2HatCFg&index=2
