@@ -57,8 +57,16 @@ class SortData:
     
     @staticmethod
     def get_gesamtumsatz() -> str:
-        return "100"
+        r = str(sum(SortData.df["Gesamtpreis"]))
+        s = r.split(".")
+        t = s[0] + "." + s[1][0] + s[1][1]
+        return t
 
     @staticmethod
     def get_umsatz_im_mohnat(mohnat : int) -> str:
-        return "100"
+        grouped = SortData.df.groupby(["month"]).sum()
+        print(grouped)
+        summe = str(grouped["Gesamtpreis"][mohnat])
+        s = summe.split(".")
+        t = s[0] + "." + s[1][0] + s[1][1]
+        return summe

@@ -49,13 +49,14 @@ body_app = dbc.Container([
                 ]
             )
         ], style={'height':'150px'})],width = 4),
-        html.Iframe(
-            srcDoc=dbc.Col([dcc.Markdown("# Umsatz  aller   Mohnate: **" + mg.SortData.get_gesamtumsatz() + "€**")])
-        ),
-        html.Iframe(
+        dbc.Col(html.Iframe(
+            id='gesamtumsatz',
+            srcDoc=None
+        )),
+        dbc.Col(html.Iframe(
             id='mohnatlicher_umsatz',
             srcDoc=None
-        )
+        ))
     ]),
     html.Br(),
     html.Br(),
@@ -75,10 +76,8 @@ body_app = dbc.Container([
     style = {'backgroundColor':'#f7f7f7'}, fluid = True
     )
 app.layout = html.Div(id = 'parent', children = [navbar, body_app])
-@app.callback([Output('mohnatlicher_umsatz', 'srcDoc')
-               ],
-              [Input('dropdown_base','value'),
-                Input('dropdown_comp','value')])
+@app.callback([Output('gesamtumsatz', 'srcDoc'), Output('mohnatlicher_umsatz', 'srcDoc')],
+              [Input('dropdown_base','value'), Input('dropdown_comp','value')])
 def update_cards(base, comparison):
     months_index = 0
     while months_index < len(MONTHS):
@@ -86,12 +85,11 @@ def update_cards(base, comparison):
             break
         else:
             months_index += 1
-    result_1 = [
-        dbc.CardBody([
-            html.H3("Umsatz aktueller Mohnat: " + mg.SortData.get_umsatz_im_mohnat(months_index) + "€", style = {'color':'#090059','textAlign':'center'})
-        ])
-    ]
-    return result_1
+    months_index += 1
+    print(base)
+    result_0 = "Umsatz  aller   Mohnate: " + mg.SortData.get_gesamtumsatz() + "€"
+    result_1 = "Umsatz aktueller Mohnat: " + mg.SortData.get_umsatz_im_mohnat(months_index) + "€"
+    return result_0, result_1
 
 if __name__ == "__main__":
     app.run_server()
