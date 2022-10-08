@@ -13,6 +13,7 @@ print(mg.SortData.df)
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 PLOTLY_LOGO = "https://images.plot.ly/logo/new-branding/plotly-logomark.png"
 TITLE = 'Supermarkt Verkäufe'
+MONTHS = ["Jan", "Feb", "Mär"]
 app.title = TITLE
 server = app.server
 navbar = dbc.Navbar( id = 'navbar', children = [
@@ -34,13 +35,13 @@ body_app = dbc.Container([
                         dbc.Col([
                             html.H6('Aktueller Monat'),
                             dcc.Dropdown( id = 'dropdown_base', options = [
-                            {'label':i, 'value':i } for i in ["Jan", "Feb", "Mär"]],
+                            {'label':i, 'value':i } for i in MONTHS],
                             value = 'Feb',)
                         ]),
                         dbc.Col([
                             html.H6('Referenzmonat'),
                             dcc.Dropdown( id = 'dropdown_comp', options = [
-                            {'label':i, 'value':i } for i in ["Jan", "Feb", "Mär"]],
+                            {'label':i, 'value':i } for i in MONTHS],
                             value = 'Jan',)
                             ]
                         ),
@@ -48,8 +49,13 @@ body_app = dbc.Container([
                 ]
             )
         ], style={'height':'150px'})],width = 4),
-        dbc.Col([dcc.Markdown("# Umsatz  aller   Mohnate: **" + mg.SortData.get_gesamtumsatz() + "€**")]),
-        dbc.Col([dcc.Markdown("# Umsatz aktueller Mohnat: **" + mg.SortData.get_umsatz_im_mohnat(0) + "€**")])
+        html.Iframe(
+            srcDoc=dbc.Col([dcc.Markdown("# Umsatz  aller   Mohnate: **" + mg.SortData.get_gesamtumsatz() + "€**")])
+        ),
+        html.Iframe(
+            id='mohnatlicher_umsatz',
+            srcDoc=None
+        )
     ]),
     html.Br(),
     html.Br(),
@@ -69,28 +75,23 @@ body_app = dbc.Container([
     style = {'backgroundColor':'#f7f7f7'}, fluid = True
     )
 app.layout = html.Div(id = 'parent', children = [navbar, body_app])
-
-
-@app.callback([Output('card_num1', 'children'),
-               Output('card_num2', 'children'),
-               ],)
-def update_cards():
-    card_content = [
+@app.callback([Output('mohnatlicher_umsatz', 'srcDoc')
+               ],
+              [Input('dropdown_base','value'),
+                Input('dropdown_comp','value')])
+def update_cards(base, comparison):
+    months_index = 0
+    while months_index < len(MONTHS):
+        if base == MONTHS[months_index]:
+            break
+        else:
+            months_index += 1
+    result_1 = [
         dbc.CardBody([
-                html.H6('Gesamtumsatz', style = {'fontWeight':'lighter', 'textAlign':'center'}),
-                html.H3('{0}{1}'.format(mg.SortData.get_gesamtumsatz(), "€"), style = {'color':'#090059','textAlign':'center'})
-                ]
-            )
-        ]
-    card_content1 = [
-        dbc.CardBody([
-                html.H6('Ferienumsatz', style = {'fontWeight':'lighter', 'textAlign':'center'}),
-                html.H3('{0}{1}'.format(mg.SortData.get_umsatz_im_mohnat(0), "€"), style = {'color':'#090059','textAlign':'center'})
-                ]
-            )
-        ]
-    return card_content, card_content1
+            html.H3("Umsatz aktueller Mohnat: " + mg.SortData.get_umsatz_im_mohnat(months_index) + "€", style = {'color':'#090059','textAlign':'center'})
+        ])
+    ]
+    return result_1
 
 if __name__ == "__main__":
     app.run_server()
-    # https://www.youtube.com/watch?v=cCRF7iM-iF4&list=PLh3I780jNsiTnCs2LNt4ckbV-c2HatCFg&index=2
