@@ -24,18 +24,27 @@ class SortData:
         SortData.df["Month"] = monthAsString
     
     @staticmethod
-    def umsatz_nach_filialen():
-        grouped = SortData.df.groupby(["Filiale"]).sum()
+    def umsatz_nach_filialen(month : int):
+        grouped = SortData.df.groupby(["month", "Filiale"]).sum()
+        grouped = SortData.df[SortData.df["month"] == month]
         return {
             "Filiale": list(grouped["Gesamtpreis"].keys()),
             "Gesamtpreis": list(grouped["Gesamtpreis"].values)
         }
     
     @staticmethod
-    def umsatz_nach_geschlecht():
-        grouped = SortData.df.groupby(["Geschlecht"]).sum()
+    def umsatz_nach_geschlecht(month : int):
+        grouped = SortData.df.groupby(["month", "Geschlecht"]).sum()
         res = pd.DataFrame(grouped["Gesamtpreis"])
-        return res
+        res = res.loc[[str(month)]]
+        gender_array = []
+        for e in list(res["Gesamtpreis"].keys()):
+            gender_array.append(e[1])
+        o = {
+            "Geschlecht": gender_array,
+            "Gesamtpreis": list(res["Gesamtpreis"].values)
+        }
+        return o
     
     @staticmethod
     def urzeit_umsatz_produktlinie():
@@ -50,8 +59,9 @@ class SortData:
         return res
     
     @staticmethod
-    def produktlienie_und_bewertungen():
-        grouped = SortData.df.groupby(["Produktlinie"]).mean()
+    def produktlienie_und_bewertungen(month : int):
+        grouped = SortData.df.groupby(["month", "Produktlinie"]).mean()
+        grouped = SortData.df[SortData.df["month"] == month]
         res = pd.DataFrame(grouped["Bewertung"])
         return res
     
@@ -70,3 +80,8 @@ class SortData:
         s = summe.split(".")
         t = s[0] + "." + s[1][0] + s[1][1]
         return summe
+
+def print_all():
+    print("------------------")
+    print(SortData.umsatz_nach_geschlecht(2))
+    print("------------------")
