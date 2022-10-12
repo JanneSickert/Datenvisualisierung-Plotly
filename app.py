@@ -79,10 +79,10 @@ app.layout = html.Div(id = 'parent', children = [navbar, body_app])
 mg.print_all()
 @app.callback([Output('gesamtumsatz', 'srcDoc'), 
                Output('mohnatlicher_umsatz', 'srcDoc'),
-               Output('card_num3', 'children'),
-               Output('card_num4', 'children'),
-               Output('card_num5', 'children'),
-               Output('card_num6', 'children')
+               #Output('card_num3', 'children'),
+               #Output('card_num4', 'children'),
+               #Output('card_num5', 'children'),
+               #Output('card_num6', 'children')
                ],
               [Input('dropdown_base','value'), Input('dropdown_comp','value')])
 def update_cards(base, comparison):
@@ -103,31 +103,35 @@ def update_cards(base, comparison):
     print(base)
     result_0 = "Umsatz  aller   Mohnate: " + mg.SortData.get_gesamtumsatz() + "€"
     result_1 = "Umsatz aktueller Mohnat: " + mg.SortData.get_umsatz_im_mohnat(months_index) + "€"
-    result_2 = [
-        dbc.CardBody([
-                html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
-                dbc.Row([
-                    dbc.Col([dcc.Graph(figure = dcc.Graph(
-                figure={
-                    "data": [
-                        {"type": "Pie", "x": mg.SortData.umsatz_nach_geschlecht(months_index)["Gesamtpreis"]}
-                    ],
-                    "layout": {"title": {"text": "A graph!"}},
-                }
-                ), style = {'height':'300px'}),
-                ]),
-                    dbc.Col([dcc.Graph(figure={
-                    "data": [
-                        {"type": "Pie", "x": mg.SortData.umsatz_nach_geschlecht(motnhs_index_comp)["Gesamtpreis"]}
-                    ],
-                    "layout": {"title": {"text": "A graph!"}},
-                }, style = {'height':'300px'}),
-                ])
-            ])
-            ]
-        )
-    ]
-    return result_0, result_1, result_2
+    
+    # ----------------------------------------------------------
+    # Das funktioniert nicht
+    # ----------------------------------------------------------
+    #result_2 = [
+    #    dbc.CardBody([
+    #            html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
+    #            dbc.Row([
+    #                dbc.Col([dcc.Graph(figure = dcc.Graph(
+    #            figure={
+    #                "data": [
+    #                    {"type": "Pie", "x": mg.SortData.umsatz_nach_geschlecht(months_index)["Gesamtpreis"]}
+    #                ],
+    #                "layout": {"title": {"text": "A graph!"}},
+    #            }
+    #            ), style = {'height':'300px'}),
+    #            ]),
+    #                dbc.Col([dcc.Graph(figure={
+    #                "data": [
+    #                    {"type": "Pie", "x": mg.SortData.umsatz_nach_geschlecht(motnhs_index_comp)["Gesamtpreis"]}
+    #                ],
+    #                "layout": {"title": {"text": "A graph!"}},
+    #            }, style = {'height':'300px'}),
+    #            ])
+    #        ])
+    #        ]
+    #    )
+    #]
+    return result_0, result_1, #result_2
 
 if __name__ == "__main__":
     app.run_server()
