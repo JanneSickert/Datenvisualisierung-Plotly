@@ -14,7 +14,7 @@ print(mg.SortData.df)
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 PLOTLY_LOGO = "https://images.plot.ly/logo/new-branding/plotly-logomark.png"
 TITLE = 'Supermarkt Verkäufe'
-MONTHS = ["Jan", "Feb", "Mär"]
+MONTHS = ["Gesammt", "Jan", "Feb", "Mär"]
 app.title = TITLE
 server = app.server
 navbar = dbc.Navbar( id = 'navbar', children = [
@@ -81,9 +81,9 @@ mg.print_all()
 @app.callback([Output('gesamtumsatz', 'srcDoc'), 
                Output('mohnatlicher_umsatz', 'srcDoc'),
                Output('card_num3', 'children'),
-               #Output('card_num4', 'children'),
-               #Output('card_num5', 'children'),
-               #Output('card_num6', 'children')
+               Output('card_num4', 'children'),
+               Output('card_num5', 'children'),
+               Output('card_num6', 'children')
                ],
               [Input('dropdown_base','value'), Input('dropdown_comp','value')])
 def update_cards(base, comparison):
@@ -99,23 +99,54 @@ def update_cards(base, comparison):
             break
         else:
             motnhs_index_comp += 1
-    months_index += 1
-    motnhs_index_comp += 1
-    print(base)
+    print("Base: ", base, "Comp: ", comparison)
     result_0 = "Umsatz  aller   Mohnate: " + mg.SortData.get_gesamtumsatz() + "€"
     result_1 = "Umsatz aktueller Mohnat: " + mg.SortData.get_umsatz_im_mohnat(months_index) + "€"
     result_2 = [
             dbc.CardBody([
                 html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
                 dbc.Row([
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = ["A", "B"], y = [22, 44], text="Umsatz der Filiale"), style = {'height':'300px'}),
+                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
                 ]),
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = ["A", "B"], y = [22, 44], text="Umsatz der Filiale"), style = {'height':'300px'}),
+                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
                 ])
                 ])
             ])
     ]
-    return result_0, result_1, result_2
+    result_3 = [
+            dbc.CardBody([
+                html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
+                dbc.Row([
+                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
+                ]),
+                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
+                ])
+                ])
+            ])
+    ]
+    result_4 = [
+            dbc.CardBody([
+                html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
+                dbc.Row([
+                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
+                ]),
+                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
+                ])
+                ])
+            ])
+    ]
+    result_5 = [
+            dbc.CardBody([
+                html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
+                dbc.Row([
+                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
+                ]),
+                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
+                ])
+                ])
+            ])
+    ]
+    return result_0, result_1, result_2, result_3, result_4, result_5
 
 if __name__ == "__main__":
     app.run_server()
