@@ -96,22 +96,21 @@ class SortData:
             grouped = SortData.df[SortData.df["month"] == month]
             res = pd.DataFrame(grouped["Bewertung"])
             return res
-    
-    @staticmethod
-    def get_gesamtumsatz() -> str:
-        r = str(sum(SortData.df["Gesamtpreis"]))
-        s = r.split(".")
-        t = s[0] + "." + s[1][0] + s[1][1]
-        return t
 
     @staticmethod
     def get_umsatz_im_mohnat(mohnat : int) -> str:
-        grouped = SortData.df.groupby(["month"]).sum()
-        print(grouped)
-        summe = str(grouped["Gesamtpreis"][mohnat])
-        s = summe.split(".")
-        t = s[0] + "." + s[1][0] + s[1][1]
-        return t
+        if mohnat == 0:
+            r = str(sum(SortData.df["Gesamtpreis"]))
+            s = r.split(".")
+            t = s[0] + "." + s[1][0] + s[1][1]
+            return t
+        else:
+            grouped = SortData.df.groupby(["month"]).sum()
+            print(grouped)
+            summe = str(grouped["Gesamtpreis"][mohnat])
+            s = summe.split(".")
+            t = s[0] + "." + s[1][0] + s[1][1]
+            return t
 
 def test_mining():
     SortData.init_dataframe()
@@ -126,5 +125,3 @@ def test_mining():
     print("1 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(1))
     print("1 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(1))
     print("1 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(1))
-
-test_mining()

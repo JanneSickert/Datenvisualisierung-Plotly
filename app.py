@@ -7,7 +7,6 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import os
 import Mining as mg
-import MiningGesamt
 
 mg.SortData.init_dataframe()
 print(mg.SortData.df)
@@ -77,7 +76,6 @@ body_app = dbc.Container([
     style = {'backgroundColor':'#f7f7f7'}, fluid = True
     )
 app.layout = html.Div(id = 'parent', children = [navbar, body_app])
-mg.print_all()
 @app.callback([Output('gesamtumsatz', 'srcDoc'), 
                Output('mohnatlicher_umsatz', 'srcDoc'),
                Output('card_num3', 'children'),
@@ -100,8 +98,8 @@ def update_cards(base, comparison):
         else:
             motnhs_index_comp += 1
     print("Base: ", base, "Comp: ", comparison)
-    result_0 = "Umsatz  aller   Mohnate: " + mg.SortData.get_gesamtumsatz() + "€"
-    result_1 = "Umsatz aktueller Mohnat: " + mg.SortData.get_umsatz_im_mohnat(months_index) + "€"
+    result_0 = "Umsatz Basis  Mohnat: " + mg.SortData.get_umsatz_im_mohnat(months_index) + "€"
+    result_1 = "Umsatz Referenzmonat: " + mg.SortData.get_umsatz_im_mohnat(motnhs_index_comp) + "€"
     result_2 = [
             dbc.CardBody([
                 html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
