@@ -79,6 +79,12 @@ body_app = dbc.Container([
         ]),
     html.Br(),
     html.Br(),
+    dbc.Row([
+        dbc.Col([dbc.Card(id = 'card_num9',style={'height':'350px'})]),
+        dbc.Col([dbc.Card(id = 'card_num10',style={'height':'350px'})])
+        ]),
+    html.Br(),
+    html.Br(),
     ],
     style = {'backgroundColor':'#f7f7f7'}, fluid = True
     )
@@ -91,6 +97,8 @@ app.layout = html.Div(id = 'parent', children = [navbar, body_app])
                Output('card_num6', 'children'),
                Output('card_num7', 'children'),
                Output('card_num8', 'children'),
+               Output('card_num9', 'children'),
+               Output('card_num10', 'children'),
                ],
               [Input('dropdown_base','value'), Input('dropdown_comp','value')])
 def update_cards(base, comparison):
@@ -163,7 +171,25 @@ def update_cards(base, comparison):
                  ]
              )
          ]
-    return result_0, result_1, result_2, result_2_1, result_3, result_3_1, result_4, result_4_1
+    data_5_base = mg.SortData.produktlienie_und_bewertungen(months_index)
+    data_5_comp = mg.SortData.produktlienie_und_bewertungen(motnhs_index_comp)
+    result_5 = [
+         dbc.CardBody([
+                 html.H6('Bewertung der Produktlinie Base', 
+                 style = {'fontWeight':'bold', 'textAlign':'center'}),
+                 dcc.Graph(figure = px.bar(x = data_5_base["Produktlinie"], y = data_5_base["Bewertung"]))
+                 ]
+             )
+         ]
+    result_5_1 = [
+         dbc.CardBody([
+                 html.H6('Bewertung der Produktlinie Referenzmonat', 
+                 style = {'fontWeight':'bold', 'textAlign':'center'}),
+                 dcc.Graph(figure = px.bar(x = data_5_comp["Produktlinie"], y = data_5_comp["Bewertung"]))
+                 ]
+             )
+         ]
+    return result_0, result_1, result_2, result_2_1, result_3, result_3_1, result_4, result_4_1, result_5, result_5_1
 
 if __name__ == "__main__":
     app.run_server()

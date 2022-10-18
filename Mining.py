@@ -72,20 +72,16 @@ class SortData:
         return result_df
     
     @staticmethod
-    def produktlienie_und_bewertungen(month : int):
+    def produktlienie_und_bewertungen(month : int): 
         if month == 0:
             grouped = SortData.df.groupby(["Produktlinie"]).mean()
-            res = pd.DataFrame(grouped["Bewertung"])
-            o = {
-                "Produktlinie": list(res["Bewertung"].keys()),
-                "Bewertung": list(res["Bewertung"].values)
-            }
-            return o
         else:
-            grouped = SortData.df.groupby(["month", "Produktlinie"]).mean()
-            grouped = SortData.df[SortData.df["month"] == month]
-            res = pd.DataFrame(grouped["Bewertung"])
-            return res
+            selectiert = SortData.df[SortData.df["month"] == str(month)]
+            grouped = selectiert.groupby(["Produktlinie"]).mean()
+        return {
+            "Produktlinie": list(grouped["Bewertung"].keys()),
+            "Bewertung": list(grouped["Bewertung"].values)
+        }
 
     @staticmethod
     def get_umsatz_im_mohnat(mohnat : int) -> str:
@@ -101,19 +97,3 @@ class SortData:
             s = summe.split(".")
             t = s[0] + "." + s[1][0] + s[1][1]
             return t
-
-def test_mining():
-    SortData.init_dataframe()
-    #print("0 umsatz_nach_filialen ", SortData.umsatz_nach_filialen(0))
-    #print("0 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(0))
-    print("0 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(0))
-    #print("0 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(0))
-    #print("get_gesamtumsatz ", SortData.get_gesamtumsatz())
-    #print("0 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(0))
-    #print("1 umsatz_nach_filialen ", SortData.umsatz_nach_filialen(2))
-    #print("1 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(1))
-    print("1 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(1))
-    #print("1 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(1))
-    #print("1 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(1))
-
-#test_mining()
