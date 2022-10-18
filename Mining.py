@@ -38,8 +38,8 @@ class SortData:
                 "Gesamtpreis": list(grouped["Gesamtpreis"].values)
             }
         else:
-            grouped = SortData.df.groupby(["month", "Filiale"]).sum()
-            grouped = SortData.df[SortData.df["month"] == month]
+            selectiert = SortData.df[SortData.df["month"] == str(month)]
+            grouped = selectiert.groupby(["Filiale"]).sum()
             return {
                 "Filiale": list(grouped["Gesamtpreis"].keys()),
                 "Gesamtpreis": list(grouped["Gesamtpreis"].values)
@@ -107,7 +107,7 @@ class SortData:
         else:
             grouped = SortData.df.groupby(["month"]).sum()
             print(grouped)
-            summe = str(grouped["Gesamtpreis"][mohnat])
+            summe = str(grouped["Gesamtpreis"][mohnat - 1])
             s = summe.split(".")
             t = s[0] + "." + s[1][0] + s[1][1]
             return t
@@ -115,13 +115,15 @@ class SortData:
 def test_mining():
     SortData.init_dataframe()
     print("0 umsatz_nach_filialen ", SortData.umsatz_nach_filialen(0))
-    print("0 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(0))
-    print("0 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(0))
-    print("0 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(0))
-    print("get_gesamtumsatz ", SortData.get_gesamtumsatz())
-    print("0 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(0))
-    print("1 umsatz_nach_filialen ", SortData.umsatz_nach_filialen(1))
-    print("1 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(1))
-    print("1 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(1))
-    print("1 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(1))
-    print("1 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(1))
+    #print("0 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(0))
+    #print("0 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(0))
+    #print("0 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(0))
+    #print("get_gesamtumsatz ", SortData.get_gesamtumsatz())
+    #print("0 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(0))
+    print("1 umsatz_nach_filialen ", SortData.umsatz_nach_filialen(2))
+    #print("1 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(1))
+    #print("1 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(1))
+    #print("1 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(1))
+    #print("1 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(1))
+
+#test_mining()

@@ -7,6 +7,7 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import os
 import Mining as mg
+import plotly.express as px
 
 mg.SortData.init_dataframe()
 print(mg.SortData.df)
@@ -66,12 +67,6 @@ body_app = dbc.Container([
         ]),
     html.Br(),
     html.Br(),
-    dbc.Row([
-        dbc.Col([dbc.Card(id = 'card_num5',style={'height':'350px'})]),
-        dbc.Col([dbc.Card(id = 'card_num6',style={'height':'350px'})])
-        ]),
-    html.Br(),
-    html.Br()
     ],
     style = {'backgroundColor':'#f7f7f7'}, fluid = True
     )
@@ -80,8 +75,6 @@ app.layout = html.Div(id = 'parent', children = [navbar, body_app])
                Output('mohnatlicher_umsatz', 'srcDoc'),
                Output('card_num3', 'children'),
                Output('card_num4', 'children'),
-               Output('card_num5', 'children'),
-               Output('card_num6', 'children')
                ],
               [Input('dropdown_base','value'), Input('dropdown_comp','value')])
 def update_cards(base, comparison):
@@ -100,51 +93,25 @@ def update_cards(base, comparison):
     print("Base: ", base, "Comp: ", comparison)
     result_0 = "Umsatz Basis  Mohnat: " + mg.SortData.get_umsatz_im_mohnat(months_index) + "€"
     result_1 = "Umsatz Referenzmonat: " + mg.SortData.get_umsatz_im_mohnat(motnhs_index_comp) + "€"
+    data_2_base = mg.SortData.umsatz_nach_filialen(months_index)
+    data_2_comp = mg.SortData.umsatz_nach_filialen(motnhs_index_comp)
     result_2 = [
-            dbc.CardBody([
-                html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
-                dbc.Row([
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
-                ]),
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
-                ])
-                ])
-            ])
-    ]
-    result_3 = [
-            dbc.CardBody([
-                html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
-                dbc.Row([
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
-                ]),
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
-                ])
-                ])
-            ])
-    ]
-    result_4 = [
-            dbc.CardBody([
-                html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
-                dbc.Row([
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
-                ]),
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
-                ])
-                ])
-            ])
-    ]
-    result_5 = [
-            dbc.CardBody([
-                html.H6('Umsatz nach Geschlecht', style = {'fontWeight':'bold', 'textAlign':'center'}),
-                dbc.Row([
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
-                ]),
-                    dbc.Col([dcc.Graph(figure = go.Bar(x = [1, 2], y = [2, 4], text="Umsatz der Filiale"), style = {'height':'300px'}),
-                ])
-                ])
-            ])
-    ]
-    return result_0, result_1, result_2, result_3, result_4, result_5
+         dbc.CardBody([
+                 html.H6('Umsatz nach Filiale Base', 
+                 style = {'fontWeight':'bold', 'textAlign':'center'}),
+                 dcc.Graph(figure = px.bar(x = data_2_base["Filiale"], y = data_2_base["Gesamtpreis"]))
+                 ]
+             )
+         ]
+    result_2_1 = [
+         dbc.CardBody([
+                 html.H6('Umsatz nach Filiale Comp', 
+                 style = {'fontWeight':'bold', 'textAlign':'center'}),
+                 dcc.Graph(figure = px.bar(x = data_2_comp["Filiale"], y = data_2_comp["Gesamtpreis"]))
+                 ]
+             )
+         ]
+    return result_0, result_1, result_2, result_2_1
 
 if __name__ == "__main__":
     app.run_server()
