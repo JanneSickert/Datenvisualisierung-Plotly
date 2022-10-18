@@ -73,6 +73,12 @@ body_app = dbc.Container([
         ]),
     html.Br(),
     html.Br(),
+    dbc.Row([
+        dbc.Col([dbc.Card(id = 'card_num7',style={'height':'350px'})]),
+        dbc.Col([dbc.Card(id = 'card_num8',style={'height':'350px'})])
+        ]),
+    html.Br(),
+    html.Br(),
     ],
     style = {'backgroundColor':'#f7f7f7'}, fluid = True
     )
@@ -83,6 +89,8 @@ app.layout = html.Div(id = 'parent', children = [navbar, body_app])
                Output('card_num4', 'children'),
                Output('card_num5', 'children'),
                Output('card_num6', 'children'),
+               Output('card_num7', 'children'),
+               Output('card_num8', 'children'),
                ],
               [Input('dropdown_base','value'), Input('dropdown_comp','value')])
 def update_cards(base, comparison):
@@ -137,7 +145,25 @@ def update_cards(base, comparison):
                  ]
              )
          ]
-    return result_0, result_1, result_2, result_2_1, result_3, result_3_1
+    data_4_base = mg.SortData.urzeit_umsatz_produktlinie(months_index)
+    data_4_comp = mg.SortData.urzeit_umsatz_produktlinie(motnhs_index_comp)
+    result_4 = [
+         dbc.CardBody([
+                 html.H6('Umsatz Uhrzeit Produktlinie Base', 
+                 style = {'fontWeight':'bold', 'textAlign':'center'}),
+                 dcc.Graph(figure = px.bar(data_4_base, x="stunde", y="Gesamtpreis", color="Produktlinie", barmode="group"))
+                 ]
+             )
+         ]
+    result_4_1 = [
+         dbc.CardBody([
+                 html.H6('Umsatz Uhrzeit Produktlinie Referenzmonat', 
+                 style = {'fontWeight':'bold', 'textAlign':'center'}),
+                 dcc.Graph(figure = px.bar(data_4_comp, x="stunde", y="Gesamtpreis", color="Produktlinie", barmode="group"))
+                 ]
+             )
+         ]
+    return result_0, result_1, result_2, result_2_1, result_3, result_3_1, result_4, result_4_1
 
 if __name__ == "__main__":
     app.run_server()

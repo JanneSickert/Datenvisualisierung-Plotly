@@ -63,12 +63,13 @@ class SortData:
         res = {
             "stunde": [], 
             "Produktlinie": [],
-            "values": list(grouped["Gesamtpreis"].values)
+            "Gesamtpreis": list(grouped["Gesamtpreis"].values)
         }
         for e in grouped["Gesamtpreis"].keys():
             res["stunde"].append(e[0])
             res["Produktlinie"].append(e[1])
-        return res
+        result_df = pd.DataFrame(res)
+        return result_df
     
     @staticmethod
     def produktlienie_und_bewertungen(month : int):
@@ -104,14 +105,14 @@ class SortData:
 def test_mining():
     SortData.init_dataframe()
     #print("0 umsatz_nach_filialen ", SortData.umsatz_nach_filialen(0))
-    print("0 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(0))
-    #print("0 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(0))
+    #print("0 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(0))
+    print("0 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(0))
     #print("0 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(0))
     #print("get_gesamtumsatz ", SortData.get_gesamtumsatz())
     #print("0 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(0))
     #print("1 umsatz_nach_filialen ", SortData.umsatz_nach_filialen(2))
-    print("1 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(1))
-    #print("1 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(1))
+    #print("1 umsatz_nach_geschlecht ", SortData.umsatz_nach_geschlecht(1))
+    print("1 urzeit_umsatz_produktlinie ", SortData.urzeit_umsatz_produktlinie(1))
     #print("1 produktlienie_und_bewertungen ", SortData.produktlienie_und_bewertungen(1))
     #print("1 get_umsatz_im_mohnat ", SortData.get_umsatz_im_mohnat(1))
 
