@@ -67,6 +67,12 @@ body_app = dbc.Container([
         ]),
     html.Br(),
     html.Br(),
+    dbc.Row([
+        dbc.Col([dbc.Card(id = 'card_num5',style={'height':'350px'})]),
+        dbc.Col([dbc.Card(id = 'card_num6',style={'height':'350px'})])
+        ]),
+    html.Br(),
+    html.Br(),
     ],
     style = {'backgroundColor':'#f7f7f7'}, fluid = True
     )
@@ -75,6 +81,8 @@ app.layout = html.Div(id = 'parent', children = [navbar, body_app])
                Output('mohnatlicher_umsatz', 'srcDoc'),
                Output('card_num3', 'children'),
                Output('card_num4', 'children'),
+               Output('card_num5', 'children'),
+               Output('card_num6', 'children'),
                ],
               [Input('dropdown_base','value'), Input('dropdown_comp','value')])
 def update_cards(base, comparison):
@@ -105,13 +113,31 @@ def update_cards(base, comparison):
          ]
     result_2_1 = [
          dbc.CardBody([
-                 html.H6('Umsatz nach Filiale Comp', 
+                 html.H6('Umsatz nach Filiale Referenzmonat', 
                  style = {'fontWeight':'bold', 'textAlign':'center'}),
                  dcc.Graph(figure = px.bar(x = data_2_comp["Filiale"], y = data_2_comp["Gesamtpreis"]))
                  ]
              )
          ]
-    return result_0, result_1, result_2, result_2_1
+    data_3_base = mg.SortData.umsatz_nach_geschlecht(months_index)
+    data_3_comp = mg.SortData.umsatz_nach_geschlecht(motnhs_index_comp)
+    result_3 = [
+         dbc.CardBody([
+                 html.H6('Umsatz nach Geschlecht Base', 
+                 style = {'fontWeight':'bold', 'textAlign':'center'}),
+                 dcc.Graph(figure = px.pie(names = data_3_base["Geschlecht"], values = data_3_base["Gesamtpreis"]))
+                 ]
+             )
+         ]
+    result_3_1 = [
+         dbc.CardBody([
+                 html.H6('Umsatz nach Geschlecht Referenzmonat', 
+                 style = {'fontWeight':'bold', 'textAlign':'center'}),
+                 dcc.Graph(figure = px.pie(names = data_3_comp["Geschlecht"], values = data_3_comp["Gesamtpreis"]))
+                 ]
+             )
+         ]
+    return result_0, result_1, result_2, result_2_1, result_3, result_3_1
 
 if __name__ == "__main__":
     app.run_server()
